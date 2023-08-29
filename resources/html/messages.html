@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="content">
+        <div class="columns is-centered">
+            <div class="column is-two-thirds ">
+                <h3>Messages</h3>
+                <ul class="messages box has-background-primary-light">
+                    {% for message in messages %}
+                    <li class="box">
+                        <time>
+                            {{ message.timestamp|date:"dd-MM-YYYY HH:mm" }}
+                        </time>
+                        <p class="mb-0">Message: <strong>{{ message.message }}</strong></p>
+                        <p>From: <i>{{ message.name }}</i></p>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <hr>
+        <div class="columns is-centered mt-3">
+            <div class="column is-two-thirds">
+                <h3>My message:</h3>
+                <div class="box has-background-info-light">
+                    <form method="POST" action="/message">
+                        {% csrf-field %}
+                        <div class="field">
+                            <label class="label" for="name">Name</label>
+                            {% if errors.name %}
+                                <p class="notification is-danger">{{errors.name|join}}</p>
+                            {% endif %}
+                            <input class="input" type="text" name="name" value="{{name}}" />
+                        </div>
+                        <div class="field">
+                            <label class="label" for="message">Message</label>
+                            {% if errors.message %}
+                                <p class="notification is-danger">{{errors.message|join}}</p>
+                            {% endif %}
+                            <textarea class="textarea" name="message" value="{{name}}"></textarea>
+                        </div>
+                        <input class="button is-primary" type="submit" value="comment" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

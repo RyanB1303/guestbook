@@ -33,3 +33,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+li time {
+  font-size: 0.75em;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+li p i {
+  font-size: 0.95em;
+  color: rgba(110, 98, 98, 0.75);
+}
