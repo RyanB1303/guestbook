@@ -25,6 +25,9 @@
                  [org.clojure/tools.logging "1.1.0"]
                  ; frontend
                  [org.clojure/clojurescript "1.11.51" :scop "provided"]
+                 [reagent "1.2.0"]
+                 [cljsjs/react "17.0.2-0"]
+                 [cljsjs/react-dom "17.0.2-0"]
                  [org.webjars.npm/bulma "0.9.1"]
                  [org.webjars.npm/material-icons "0.3.1"]
                  ; endfrontend
