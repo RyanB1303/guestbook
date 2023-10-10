@@ -2,6 +2,7 @@
 {% block content %}
 <div class="content">
   <h5>Content</h5>
+  <input id="token" type="hidden" value={{csrf-token}}>
   <div id="main"> </div>
 </div>
 {% endblock %}
