@@ -8,13 +8,14 @@
    [ring.util.http-response :as response]
    [guestbook.validation :refer [validate-message]]))
 
-(defn home-page [request]
-  (layout/render request "home.html" {:docs (-> "docs/docs.md" io/resource slurp)}))
 
-(defn messages-page [{:keys [flash] :as request}]
-  (layout/render request "messages.html"
-                 (merge {:messages (db/get-messages)}
-                        (select-keys flash [:name :message :errors]))))
+(defn home-page [request]
+  (layout/render request "home.html"))
+
+;; (defn messages-page [{:keys [flash] :as request}]
+;;   (layout/render request "messages.html"
+;;                  (merge {:messages (db/get-messages)}
+;;                         (select-keys flash [:name :message :errors]))))
 
 (defn save-message! [{:keys [params]}]
   (if-let [errors (validate-message params)]
@@ -29,11 +30,14 @@
 (defn about-page [request]
   (layout/render request "about.html"))
 
+(defn message-list [_]
+  (response/ok {:messages (vec (db/get-messages))}))
+
 (defn home-routes []
   [""
    {:middleware [middleware/wrap-csrf
                  middleware/wrap-formats]}
    ["/" {:get home-page}]
-   ["/messages" {:get messages-page}]
+   ["/messages" {:get message-list}]
    ["/message" {:post save-message!}]
    ["/about" {:get about-page}]])

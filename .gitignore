@@ -19,3 +19,4 @@ profiles.clj
 /.clj-kondo
 /.idea
 /guestbook.iml
+/.calva
