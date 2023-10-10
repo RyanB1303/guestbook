@@ -25,6 +25,7 @@
                  [org.clojure/tools.logging "1.1.0"]
                  ; frontend
                  [org.clojure/clojurescript "1.11.51" :scop "provided"]
+                 [re-frame "1.3.0"]
                  [reagent "1.2.0"]
                  [cljs-ajax "0.8.1"]
                  [cljsjs/react "17.0.2-0"]
