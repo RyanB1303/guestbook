@@ -18,3 +18,4 @@ profiles.clj
 *.db
 /.clj-kondo
 /.idea
+/guestbook.iml
