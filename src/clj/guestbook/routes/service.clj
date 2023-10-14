@@ -61,18 +61,18 @@
       {:body ;; Data Spec for request body parameters
        {:name string?
         :message string?}}
-      :response
+      :responses
       {200 {:body map?}
        400 {:body map?}
        500 {:errors map?}} 
       :handler 
-      (fn [{:keys [params ;; {:name "someone" :message "Hello"}
-                   ]}] 
+      (fn [{{params :body} :parameters}] 
         (try (msg/save-message! params)
              (response/ok {:status :ok})
              ;; if something bad happen
              (catch Exception e
-               (let [{id :guestbook/error-id errors :errors} (ex-data e)]
+               (let [{id :guestbook/error-id 
+                      errors :errors} (ex-data e)]
                  (case id
                    :validation ;; if id == validation response
                    (response/bad-request {:errors errors})
