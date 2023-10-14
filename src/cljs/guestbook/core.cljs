@@ -29,7 +29,7 @@
                    (update db :messages/list conj message)))
 
 (defn get-messages []
-  (GET "/messages"
+  (GET "/api/messages"
     {:headers {"Accept" "application/transit+json"}
      :handler #(rf/dispatch [:messages/set (:messages %)])}))
 
@@ -46,7 +46,7 @@
 (defn send-message! [fields errors]
   (if-let [validation-errors (validate-message @fields)]
     (reset! errors validation-errors)
-    (POST "/message"
+    (POST "/api/message"
       {:format :json
        :headers
        {"Accept" "application/transit+json"
@@ -93,7 +93,7 @@
   (let [messages (rf/subscribe [:messages/list])]
     (rf/dispatch [:app/initialize])
     (get-messages)
-    (fn []
+    (fn [] 
       [:div.content>div.columns.is-centered>div.column.is-two-thirds
       (if @(rf/subscribe [:messages/loading?])
         [:h3 "Loading Messages...."]
