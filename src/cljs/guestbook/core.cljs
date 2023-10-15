@@ -104,4 +104,16 @@
          [:div.columns>div.column
           [message-form]]])])))
 
-(rdom/render [home] (.getElementById js/document "main"))
+(defn ^:dev/after-load mount-components []
+  (rf/clear-subscription-cache!)
+  (.log js/console "Mounting Components...")
+  (rdom/render [#'home] (.getElementById js/document "main"))
+  (.log js/console "Components Mounted!"))
+
+(defn init! []
+  (.log js/console "Initializing App...") 
+  (rf/dispatch [:app/initialize])
+  (get-messages)
+  (mount-components))
+
+(.log js/console "guestbook.core mounted.......")

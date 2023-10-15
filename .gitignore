@@ -18,3 +18,5 @@ profiles.clj
 /.idea
 /guestbook.iml
 /.calva
+
+/.shadow-cljs

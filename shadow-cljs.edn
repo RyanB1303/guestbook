@@ -1,6 +1,6 @@
 {:nrepl {:port 7002}
  :builds {:app {:target :browser
-                :output-dir "target/cljsbuild.public/js"
+                :output-dir "target/cljsbuild/public/js"
                 :asset-path "/js"
                 :modules {:app {:entries [guestbook.app]}}
                 :devtools {:watch-dir "resources/public"}}
