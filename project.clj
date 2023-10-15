@@ -49,24 +49,8 @@
   :target-path "target/%s/"
   :main ^:skip-aot guestbook.core
 
-  :plugins [[lein-immutant "2.1.0"] [lein-cljsbuild "1.1.8"]]
-
-  :cljsbuild {:builds
-              {:app
-               {:source-paths ["src/cljs" "src/cljc"]
-                :compiler {:output-to "target/cljsbuild/public/js/app.js"
-                           :output-dir "target/cljsbuild/public/js/out"
-                           :main "guestbook.core"
-                           :asset-path "/js/out"
-                           :optimizations :none
-                           :source-map true
-                           :pretty-print true}}}}
-  :clean-targets
-  ^{:protect false}
-  [:target-path
-   [:cljsbuild :builds :app :compiler :output-dir]
-   [:cljsbuild :builds :app :compiler :output-to]]
-
+  :plugins [[lein-immutant "2.1.0"]]
+  
   :profiles
   {:uberjar {:omit-source true
              :aot :all
