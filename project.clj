@@ -28,8 +28,12 @@
                  [org.clojure/clojurescript "1.10.773" :scope "provided"]
                  [thheller/shadow-cljs "2.11.14" :scope "provided"]
                  [com.google.javascript/closure-compiler-unshaded "v20200830" :scope "provided"]
-                 [org.clojure/google-closure-library "0.0-20191016-6ae1f72f" :scope "provided"] 
+                 [org.clojure/google-closure-library "0.0-20191016-6ae1f72f" :scope "provided"]
                  [re-frame "1.3.0"]
+                 [day8.re-frame/re-frame-10x "1.8.1"]
+                 ; fix re-frame
+                 [borkdude/edamame "1.3.23"]
+                 ;
                  [reagent "1.2.0"]
                  [cljs-ajax "0.8.1"]
                  [cljsjs/react "17.0.2-0"]
@@ -53,7 +57,7 @@
   :main ^:skip-aot guestbook.core
 
   :plugins [[lein-immutant "2.1.0"]]
-  
+
   :profiles
   {:uberjar {:omit-source true
              :aot :all
