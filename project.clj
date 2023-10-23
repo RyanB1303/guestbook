@@ -34,6 +34,7 @@
                  ; fix re-frame
                  [borkdude/edamame "1.3.23"]
                  ;
+                 [com.taoensso/sente "1.16.0"]
                  [reagent "1.2.0"]
                  [cljs-ajax "0.8.1"]
                  [cljsjs/react "17.0.2-0"]
