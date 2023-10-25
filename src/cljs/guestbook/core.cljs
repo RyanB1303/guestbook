@@ -226,6 +226,37 @@
        [:div.columns>div.column
         [message-form]]])))
 
+(defn navbar []
+  (let [burger-active (r/atom false)]
+    (fn []
+      [:nav.navbar.is-info
+       [:div.container
+        [:div.navbar-brand
+         [:a.navbar-item
+          {:href "/"
+           :style {:font-weight "bold"}}
+          "guestbook"]
+         [:span.navbar-burger.burger
+          {:data-target "nav-menu"
+           :on-click #(swap! burger-active not)
+           :class (when @burger-active "is-active")}
+          [:span]
+          [:span]
+          [:span]]]
+        [:div#nav-menu.navbar-menu
+         {:class (when @burger-active "is-active")}
+         [:div.navbar-start
+          [:a.navbar-item
+           {:href "/"}
+           "Home"]]]]])))
+
+(defn app []
+  [:div.app
+   [navbar]
+   [:section.section
+    [:div.container
+     [home]]]])
+
 (defn handle-response! [response]
   (if-let [errors (:errors response)]
     (rf/dispatch [:form/set-server-errors errors])
@@ -235,7 +266,7 @@
 
 (defn ^:dev/after-load mount-components []
   (rf/clear-subscription-cache!)
-  (rdom/render [#'home] (.getElementById js/document "main")))
+  (rdom/render [#'app] (.getElementById js/document "content")))
 
 (defn init! []
   (.log js/console "initializing App...")
