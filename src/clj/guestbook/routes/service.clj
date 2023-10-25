@@ -95,7 +95,12 @@
                 (response/conflict
                  {:message "Registration failed! User with login already exists!"})
                 (throw e))))))}}]
-
+   ["/logout"
+    {:post {:handler
+            (fn [_] (->
+                     (response/ok)
+                     (assoc :session nil)))}}]
+   ;; message / post
    ["/messages"
     {:get
      {:responses
