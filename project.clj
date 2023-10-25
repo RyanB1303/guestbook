@@ -5,7 +5,6 @@
 
   :dependencies [[cheshire "5.10.0"]
                  [clojure.java-time "0.3.2"]
-                 [com.h2database/h2 "1.4.200"]
                  [conman "0.9.1"]
                  [cprop "0.1.17"]
                  [expound "0.8.7"]
@@ -42,6 +41,7 @@
                  [org.webjars.npm/bulma "0.9.1"]
                  [org.webjars.npm/material-icons "0.3.1"]
                  ; endfrontend
+                 [org.postgresql/postgresql "42.2.8"]
                  [org.webjars/webjars-locator "0.40"]
                  [org.webjars/webjars-locator-jboss-vfs "0.1.0"]
                  [ring-webjars "0.2.0"]
