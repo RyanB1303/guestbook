@@ -11,8 +11,30 @@
 (rf/reg-event-fx
  :app/initialize
  (fn [_ _]
-   {:db {:messages/loading? true}
-    :dispatch [:messages/load]}))
+   {:db {:messages/loading? true
+         :session/loading? true}
+    :dispatch-n [[:session/load] [:messages/load]]}))
+
+;; session
+(rf/reg-event-fx
+ :session/load
+ (fn [{:keys [db]} _]
+   {:db (assoc db :session/loading? true)
+    :ajax/get {:url "/api/session"
+               :success-path [:session]
+               :success-event [:session/set]}}))
+
+(rf/reg-event-db
+ :session/set
+ (fn [db [_ {:keys [identity]}]]
+   (assoc db
+          :auth/user identity
+          :session/loading? false)))
+
+(rf/reg-sub
+ :session/loading?
+ (fn [db _] (:session/loading? db)))
+
 ;; modal
 (rf/reg-event-db
  :app/show-modal
@@ -68,6 +90,16 @@
  :auth/user
  (fn [db _]
    (:auth/user db)))
+
+(rf/reg-sub
+ :auth/user-state
+ :<- [:auth/user]
+ :<- [:session/loading?]
+ (fn [[user loading?]]
+   (cond
+     (true? loading?) :loading
+     user :authenticated
+     :else :anonymous)))
 
 (defn login-button []
   (r/with-let
@@ -430,10 +462,17 @@
            "Home"]]
          [:div.navbar-end
           [:div.navbar-item
-           (if-some [user @(rf/subscribe [:auth/user])]
+           (case @(rf/subscribe [:auth/user-state])
+             :loading
+             [:div {:style {:width "5em"}}
+              [:progress.progress.is-dark.is-small {:max 100} "30%"]]
+
+             :authenticated
              [:div.buttons
-              [nameplate user]
+              [nameplate @(rf/subscribe [:auth/user])]
               [logout-button]]
+
+             :anonymous
              [:div.buttons
               [login-button]
               [register-button]])]]]]])))

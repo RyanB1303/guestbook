@@ -1,4 +1,4 @@
-(ns guestbook.routes.service
+(ns guestbook.routes.services
   (:require
    [reitit.swagger :as swagger]
    [reitit.swagger-ui :as swagger-ui]
@@ -11,6 +11,7 @@
    [guestbook.messages :as msg]
    [guestbook.auth :as auth]
    [ring.util.http-response :as response]
+   [spec-tools.data-spec :as ds]
    [guestbook.middleware.formats :as formats]))
 
 (defn service-routes []
@@ -41,6 +42,22 @@
     ["/swagger-ui*"
      {:get (swagger-ui/create-swagger-ui-handler
             {:url "/api/swagger.json"})}]]
+   ;; session
+   ["/session"
+    {:get
+     {:responses
+      {200
+       {:body
+        {:session
+         {:identity
+          (ds/maybe
+           {:login string?
+            :created_at inst?})}}}}
+      :handler
+      (fn [{{:keys [identity]} :session}]
+        (response/ok {:session
+                      {:identity
+                       (not-empty (select-keys identity [:login :created_at]))}}))}}]
    ;; auth
    ["/login"
     {:post {:parameters
