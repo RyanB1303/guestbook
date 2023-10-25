@@ -3,7 +3,8 @@
   :description "My first clojure project"
   :url "http://github.com/RyanB1303/guestbook"
 
-  :dependencies [[cheshire "5.10.0"]
+  :dependencies [[buddy "2.0.0"]
+                 [cheshire "5.10.0"]
                  [clojure.java-time "0.3.2"]
                  [conman "0.9.1"]
                  [cprop "0.1.17"]
@@ -75,6 +76,7 @@
                   :dependencies [[pjstadig/humane-test-output "0.10.0"]
                                  [binaryage/devtools "1.0.2"]
                                  [prone "2020-01-17"]
+                                 [alembic "0.3.2"]
                                  [ring/ring-devel "1.8.2"]
                                  [ring/ring-mock "0.4.0"]]
                   :plugins      [[com.jakemccrary/lein-test-refresh "0.24.1"]
