@@ -1,0 +1,5 @@
+CREATE TABLE posts
+(id SERIAL PRIMARY KEY,
+name TEXT NOT NULL,
+message TEXT NOT NULL,
+timestamp TIMESTAMP NOT NULL DEFAULT now());

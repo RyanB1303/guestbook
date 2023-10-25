@@ -204,7 +204,7 @@
    [:div.field
     [:label.label {:for :message} "Message"]
     [errors-component :message]
-    [textarea-input {:attrs {:name :message}
+    [textarea-input {:attrs {:name :message :placeholder "Say something"}
                      :value (rf/subscribe [:form/field :message])
                      :on-save #(rf/dispatch [:form/set-field :message %])}]]
    [:input.button.is-primay
