@@ -1,0 +1,4 @@
+CREATE TABLE users
+(login TEXT PRIMARY KEY,
+password TEXT NOT NULL,
+created_at TIMESTAMP NOT NULL DEFAULT now());
