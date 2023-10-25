@@ -76,7 +76,6 @@
                   :dependencies [[pjstadig/humane-test-output "0.10.0"]
                                  [binaryage/devtools "1.0.2"]
                                  [prone "2020-01-17"]
-                                 [alembic "0.3.2"]
                                  [ring/ring-devel "1.8.2"]
                                  [ring/ring-mock "0.4.0"]]
                   :plugins      [[com.jakemccrary/lein-test-refresh "0.24.1"]
