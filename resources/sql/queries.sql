@@ -8,7 +8,7 @@ INSERT INTO posts
 -- :doc selects all alvailable messages
 SELECT * FROM posts
 
--- :name create-user! :! :n
+-- :name create-user!* :! :n
 -- :doc creates a new user with provided login and hashed password
 INSERT INTO users
 (login, password)
