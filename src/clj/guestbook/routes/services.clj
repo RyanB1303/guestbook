@@ -143,16 +143,19 @@
        400 {:body map?}
        500 {:errors map?}}
       :handler
-      (fn [{{params :body} :parameters}]
-        (try (msg/save-message! params)
-             (response/ok {:status :ok})
+      (fn [{{params :body} :parameters
+            {:keys [identity]} :session}]
+        (try
+          (->> (msg/save-message! identity params)
+               (assoc {:status :ok} :post)
+               (response/ok))
              ;; if something bad happen
-             (catch Exception e
-               (let [{id :guestbook/error-id
-                      errors :errors} (ex-data e)]
-                 (case id
-                   :validation ;; if id == validation response
-                   (response/bad-request {:errors errors})
+          (catch Exception e
+            (let [{id :guestbook/error-id
+                   errors :errors} (ex-data e)]
+              (case id
+                :validation ;; if id == validation response
+                (response/bad-request {:errors errors})
                     ;;else do
-                   (response/internal-server-error
-                    {:errors {:server-error ["Failed to save message!"]}}))))))}}]])
+                (response/internal-server-error
+                 {:errors {:server-error ["Failed to save message!"]}}))))))}}]])
