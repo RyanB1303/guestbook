@@ -12,7 +12,9 @@
    [guestbook.auth :as auth]
    [ring.util.http-response :as response]
    [spec-tools.data-spec :as ds]
-   [guestbook.middleware.formats :as formats]))
+   [guestbook.middleware.formats :as formats]
+   [guestbook.auth.ring :refer [wrap-authorized get-roles-from-match]]
+   [clojure.tools.logging :as log]))
 
 (defn service-routes []
   ["/api"
@@ -31,12 +33,31 @@
                  ;; coercing request params
                  coercion/coerce-request-middleware
                  ;; multipart params (file)
-                 multipart/multipart-middleware]
+                 multipart/multipart-middleware
+                 ;; role auth
+                 (fn [handler]
+                   (wrap-authorized
+                    handler
+                    (fn handle-authorized [req]
+                      (let [route-roles (get-roles-from-match req)]
+                        (log/debug
+                         "Roles for routes: "
+                         (:uri req)
+                         (route-roles)
+                         (log/debug "User is unauthorized!"
+                                    (-> req
+                                        :session
+                                        :identity
+                                        :roles))
+                         (response/forbidden
+                          {:message (str "User must have one of the following roles:"
+                                         (route-roles))}))))))]
     :muuntaja formats/instance
     :coercion spec-coercion/coercion
     :swagger {:id ::api}}
 
-   ["" {:no-doc true}
+   ["" {:no-doc true
+        ::auth/roles (auth/roles :swagger/swagger)}
     ["/swagger.json"
      {:get (swagger/create-swagger-handler)}]
     ["/swagger-ui*"
@@ -44,7 +65,8 @@
             {:url "/api/swagger.json"})}]]
    ;; session
    ["/session"
-    {:get
+    {::auth/roles (auth/roles :session/get)
+     :get
      {:responses
       {200
        {:body
@@ -60,7 +82,8 @@
                        (not-empty (select-keys identity [:login :created_at]))}}))}}]
    ;; auth
    ["/login"
-    {:post {:parameters
+    {::auth/roles (auth/roles :auth/login)
+     :post {:parameters
             {:body
              {:login string?
               :password string?}}
@@ -81,7 +104,8 @@
                 (response/unauthorized
                  {:message "Incorrect user or password"})))}}]
    ["/register"
-    {:post
+    {::auth/roles (auth/roles :account/register)
+     :post
      {:parameters
       {:body
        {:login string?
@@ -113,13 +137,15 @@
                  {:message "Registration failed! User with login already exists!"})
                 (throw e))))))}}]
    ["/logout"
-    {:post {:handler
+    {::auth/roles (auth/roles :auth/logout)
+     :post {:handler
             (fn [_] (->
                      (response/ok)
                      (assoc :session nil)))}}]
    ;; message / post
    ["/messages"
-    {:get
+    {::auth/roles (auth/roles :messages/list)
+     :get
      {:responses
       {200
        {:body ;; Data Spec for response body
@@ -133,7 +159,8 @@
         (response/ok (msg/message-list)))}}]
 
    ["/message"
-    {:post
+    {::auth/roles (auth/roles :message/create!)
+     :post
      {:parameters
       {:body ;; Data Spec for request body parameters
        {:name string?
